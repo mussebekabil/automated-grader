@@ -1,0 +1,24 @@
+{
+  "type": "object",
+  "properties": {
+    "code": { 
+      "type": "object" 
+    },
+    "testFiles" : { 
+      "type": "object"
+    },
+    "responseUrl" : {
+      "type": "string" 
+    },
+    "jobId": { 
+      "type": "number" 
+    },
+    "withDatabase": { 
+      "type": "boolean"
+    },
+    "graderImage" : { 
+      "type": "string" 
+    }
+  },
+  "required": ["code"]
+}

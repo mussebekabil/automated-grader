@@ -4,7 +4,10 @@
     "paths": {
       "@functions/*": ["src/functions/*"],
       "@libs/*": ["src/libs/*"],
-      "@schemas/*": ["src/schemas/*"]
-    }
+      "@schemas/*": ["src/schemas/*"],
+      "@types/*": ["src/types/*"]
+    },
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true
   }
 }
