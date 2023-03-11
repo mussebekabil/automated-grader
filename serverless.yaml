@@ -1,0 +1,24 @@
+service: automated-grader
+frameworkVersion: '3'
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: eu-west-1
+  stage: ${opt:stage, 'dev'}
+  tracing:
+    lambda: true
+    apiGateway: true
+  iam: ${file(serverless-files/serverless.iam.yaml)}
+  ecr:
+    images:
+      pythonimage:
+        path: ./src/functions/python-grader/
+  environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
+    NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000'
+plugins:
+  - serverless-esbuild
+  - serverless-offline
+functions: ${file(serverless-files/serverless.functions.yaml)}
+resources:
+  Resources: ${file(serverless-files/serverless.resources.yaml)}

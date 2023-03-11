@@ -1,0 +1,25 @@
+role:
+  statements:
+    - Effect: "Allow"
+      Action:
+        - "xray:PutTraceSegments"
+        - "xray:PutTelemetryRecords"
+      Resource:
+        - "*"
+    - Effect: Allow
+      Action:
+        - "sqs:*"
+        # - "sqs:SendMessage"
+        # - "sqs:ReceiveMessage"
+        # - "sqs:GetQueueUrl"
+        # - "sqs:SetQueueAttributes"
+        # - "sqs:DeleteMessage"
+      Resource:
+        - !GetAtt PythonGraderQueue.Arn
+    - Effect: Allow
+      Action:
+        - "sns:CreateTopic"
+        - "sns:Publish"
+      Resource:
+        - !Ref PythonGraderSNSTopic
+        - !Ref PythonGraderSNSSubscription

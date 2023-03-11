@@ -1,8 +1,7 @@
 {
   "name": "automated-grader",
   "version": "1.0.0",
-  "description": "Serverless aws-nodejs-typescript template",
-  "main": "serverless.ts",
+  "description": "Serverless automated grader for programming assignments",
   "scripts": {
     "start": "serverless offline",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,9 +10,13 @@
     "node": ">=18.13.0"
   },
   "dependencies": {
+    "@aws-sdk/client-sns": "^3.282.0",
     "@middy/core": "^3.4.0",
+    "@middy/http-error-handler": "^4.2.6",
     "@middy/http-json-body-parser": "^3.4.0",
-    "serverless-offline": "^12.0.4"
+    "cloudevents": "^6.0.4",
+    "serverless-offline": "^12.0.4",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@serverless/typescript": "^3.0.0",

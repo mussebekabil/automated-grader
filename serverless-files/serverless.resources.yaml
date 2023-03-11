@@ -1,0 +1,43 @@
+PythonGraderQueue:
+  Type: AWS::SQS::Queue
+  Properties:
+    QueueName: python-grader-queue
+    VisibilityTimeout: 960
+    # Messages will be stored (and retried) up to 2 days
+    MessageRetentionPeriod: 172800
+    # TODO: Add dead letter queue
+    # RedrivePolicy:
+    #   maxReceiveCount: 5
+    #   deadLetterTargetArn: !GetAtt PythonGraderQueueDLQ.Arn
+
+# Policy allows SNS to publish to SQS queue
+SNSToSQSPolicy:
+  Type: AWS::SQS::QueuePolicy
+  Properties:
+    PolicyDocument:
+      Version: "2012-10-17"
+      Id: SQSPolicy
+      Statement:
+        - Sid: "Allow SNS publish to SQS"
+          Effect: Allow
+          Principal: "*"
+          Resource: !GetAtt PythonGraderQueue.Arn
+          Action:
+            - "sqs:SendMessage"
+            - "sqs:ReceiveMessage"
+          # Condition:
+          #   ForAnyValue:ArnEquals:
+          #     aws:SourceArn:
+          #       - condition target topic arn
+    Queues:
+      - !Ref PythonGraderQueue
+PythonGraderSNSSubscription:
+  Type: AWS::SNS::Subscription
+  Properties:
+    Endpoint: !GetAtt PythonGraderQueue.Arn
+    Protocol: sqs
+    TopicArn: !Ref PythonGraderSNSTopic
+PythonGraderSNSTopic:
+  Type: AWS::SNS::Topic
+  Properties:
+    TopicName: python-grader-topic
