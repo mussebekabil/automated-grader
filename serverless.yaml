@@ -16,6 +16,9 @@ provider:
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
     NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000'
+    DART_QUEUE_URL: 'placeholder-queue-url' #!Ref DartGraderQueue
+    DENO_QUEUE_URL: 'placeholder-queue-url' #!Ref DenoGraderQueue
+    PYTHON_QUEUE_URL: !Ref PythonGraderQueue
 plugins:
   - serverless-esbuild
   - serverless-offline
