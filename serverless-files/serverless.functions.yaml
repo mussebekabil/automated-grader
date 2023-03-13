@@ -7,9 +7,6 @@ dispatcher:
         request:
           schemas:
             application/json: ${file(src/schemas/submission.json)}
-  environment:
-    GRADER_SNS_TOPIC_ARN: !Ref PythonGraderSNSTopic
-    GRADER_SNS_SUBSCRIPTION: !Ref PythonGraderSNSSubscription
 pythonGrader:
   image: pythonimage
   timeout: 900
