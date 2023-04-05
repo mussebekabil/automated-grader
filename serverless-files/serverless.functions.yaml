@@ -13,3 +13,9 @@ pythonGrader:
   events:
     - sqs:
         arn: !GetAtt PythonGraderQueue.Arn
+denoGrader:
+  image: denoimage
+  timeout: 900
+  events:
+    - sqs:
+        arn: !GetAtt DenoGraderQueue.Arn

@@ -13,11 +13,14 @@ provider:
     images:
       pythonimage:
         path: ./src/functions/python-grader/
+      denoimage:
+        path: ./src/functions/deno-grader/
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
     NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000'
     DART_QUEUE_URL: 'placeholder-queue-url' #!Ref DartGraderQueue
-    DENO_QUEUE_URL: 'placeholder-queue-url' #!Ref DenoGraderQueue
+    DENO_QUEUE_URL: !Ref DenoGraderQueue
+    DENO_DIR: '/tmp/' # Lambda doesn't have write permission to Deno's default cache directory
     PYTHON_QUEUE_URL: !Ref PythonGraderQueue
 plugins:
   - serverless-esbuild

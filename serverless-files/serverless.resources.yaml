@@ -9,3 +9,10 @@ PythonGraderQueue:
     # RedrivePolicy:
     #   maxReceiveCount: 5
     #   deadLetterTargetArn: !GetAtt PythonGraderQueueDLQ.Arn
+DenoGraderQueue:
+  Type: AWS::SQS::Queue
+  Properties:
+    QueueName: deno-grader-queue
+    VisibilityTimeout: 960
+    # Messages will be stored (and retried) up to 2 days
+    MessageRetentionPeriod: 172800
