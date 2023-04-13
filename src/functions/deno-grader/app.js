@@ -1,6 +1,7 @@
 "use strict";
 const util = require('util');
 const fs = require('fs');
+const exec = util.promisify(require('child_process').exec);
 
 const formatResponse = (message, statusCode = 200 ) => ({
     statusCode,
@@ -10,37 +11,18 @@ const formatResponse = (message, statusCode = 200 ) => ({
 const copySubmission = (data) => {
     try {
         const [key, value] =  Object.entries(data)[0]; 
-        fs.writeFileSync(`/tmp/${key}`, value);        
+        fs.writeFileSync(`/tmp/${key}`, value); 
+        console.log(`Successfully copied /tmp/${key}`);       
     } catch (error) {
         console.log(error)
     }
 }
-
-const cleanUp = (data) => {
-    try {
-        if(typeof data === "string") {
-            fs.unlinkSync(`/tmp/${data}`);    
-            console.log(`Successfully removed /tmp/${data}`);
-            return;  
-        }
-        const [key] =  Object.keys(data); 
-        fs.unlinkSync(`/tmp/${key}`);    
-        console.log(`Successfully removed /tmp/${key}`);    
-    } catch (error) {
-        console.log(error)
-    }
-}
-
 
 const gradeSubmission = async ({ code, testFiles }) => {
     try {
-        const exec = util.promisify(require('child_process').exec);
         [code, testFiles].map(data => copySubmission(data)); 
         
         await exec('sh grade.sh');
-
-        // Clean up code and test submission
-        [code, testFiles].map(file => cleanUp(file)); 
     } catch (error) {
         console.error(error)
     }
@@ -58,11 +40,11 @@ exports.handler = async (event, context) => {
             await gradeSubmission(JSON.parse(data));
         }));
         
-        const testResult = require('/tmp/results.json');
-        console.log(testResult);
-        
+        var testResult = JSON.parse(fs.readFileSync('/tmp/results.json', 'utf8'));
+        console.log("Test results: ", testResult);
+
         // Clean up test results
-        ["results.err", "results.out", "results.json"].map(file => cleanUp(file)); 
+        await exec('sh cleanup.sh');
 
         return formatResponse(testResult);
     } catch (e) {
