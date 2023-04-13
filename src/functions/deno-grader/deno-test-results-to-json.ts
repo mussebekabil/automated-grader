@@ -1,10 +1,16 @@
 // Tested for Deno 1.22.0
-const resultsText = await Deno.readTextFileSync('/tmp/results.out');
-const errorsText = await Deno.readTextFileSync('/tmp/results.err');
+const resultsText = Deno.readTextFileSync('/tmp/results.out');
+const errorsText = Deno.readTextFileSync('/tmp/results.err');
 
 const filthyCharRegex = /(\x1b|\\x1b)\[[0-9]*m?/g;
-const cleanedOutputText = resultsText.replaceAll(filthyCharRegex, '').replaceAll('\\n', '\n')
-const cleanedErrorsText = errorsText.replaceAll(filthyCharRegex, '');
+const downloadInfoRegex = new RegExp("^Download.*", "gm"); // Cleanup downloaded dependency logs
+const cleanedOutputText = resultsText
+    .replaceAll(filthyCharRegex, '')
+    .replaceAll('\\n', '\n')
+const cleanedErrorsText = errorsText
+    .replaceAll(filthyCharRegex, '')
+    .replaceAll(downloadInfoRegex, '')
+    .replaceAll('\n\n', '')
 
 let inTests = false;
 let inFailures = false;
@@ -77,7 +83,7 @@ const resultJson = {
     testOutput: cleanedOutputText,
     testErrors: cleanedErrorsText,
     tests: testResultSummaryMatch ? parseTests() : [], // If there is no final test result line, we can assume the tests have crashed
-    // TODO: specify more better way to indicate inability to parse results. (now: empty tests results)
+// TODO: specify more better way to indicate inability to parse results. (now: empty tests results)
 };
 
 console.log(JSON.stringify(resultJson));
