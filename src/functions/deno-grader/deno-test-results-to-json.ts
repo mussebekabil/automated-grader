@@ -3,13 +3,11 @@ const resultsText = Deno.readTextFileSync('/tmp/results.out');
 const errorsText = Deno.readTextFileSync('/tmp/results.err');
 
 const filthyCharRegex = /(\x1b|\\x1b)\[[0-9]*m?/g;
-const downloadInfoRegex = new RegExp("^Download.*", "gm"); // Cleanup downloaded dependency logs
 const cleanedOutputText = resultsText
     .replaceAll(filthyCharRegex, '')
     .replaceAll('\\n', '\n')
 const cleanedErrorsText = errorsText
     .replaceAll(filthyCharRegex, '')
-    .replaceAll(downloadInfoRegex, '')
     .replaceAll('\n\n', '')
 
 let inTests = false;

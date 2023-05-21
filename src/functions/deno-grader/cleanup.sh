@@ -2,4 +2,4 @@
 
 cd /tmp 
 
-rm -f *.(js|ts)   results.* 
+rm -f *.js   results.* 
