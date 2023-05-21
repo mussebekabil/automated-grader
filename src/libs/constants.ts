@@ -3,3 +3,4 @@ export const  GRADER_TYPES = {
   DENO: 'deno-grader', 
   PYTHON: 'python-grader'
 }
+export const TABLE_NAME = "grading-table";

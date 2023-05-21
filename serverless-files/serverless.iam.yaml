@@ -16,3 +16,8 @@ role:
       Resource:
         - !GetAtt PythonGraderQueue.Arn
         - !GetAtt DenoGraderQueue.Arn
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:*"
+      Resource:
+        - !GetAtt GradingTable.Arn
