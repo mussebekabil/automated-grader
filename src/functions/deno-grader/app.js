@@ -62,8 +62,8 @@ exports.handler = async (event, context) => {
         const testResult = []; 
         await Promise.all(Records.map(async (record) => {
             const { id, data } = JSON.parse(record.body);
-            await gradeSubmission(JSON.parse(data));
-
+            const parsedData = typeof data === "object" ? data : JSON.parse(data);
+            await gradeSubmission(parsedData);
             testResult.push(JSON.parse(fs.readFileSync('/tmp/results.json', 'utf8')));
             console.log("Test results: ", testResult);
 
